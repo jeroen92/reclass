@@ -109,7 +109,7 @@ class Core(object):
         merge_base.merge(entity)
         return merge_base
 
-    def _nodeinfo(self, nodename):
+    def _nodeinfo(self, nodename, interpolate=True):
         node_entity = self._storage.get_node(nodename)
         base_entity = Entity(name='base')
         base_entity.merge(self._get_class_mappings_entity(node_entity.name))
@@ -119,7 +119,7 @@ class Core(object):
                                           nodename=base_entity.name)
         ret = self._recurse_entity(node_entity, merge_base, seen=seen,
                                    nodename=node_entity.name)
-        ret.interpolate()
+	if interpolate: ret.interpolate()
         return ret
 
     def _nodeinfo_as_dict(self, nodename, entity):
@@ -132,13 +132,13 @@ class Core(object):
         ret.update(entity.as_dict())
         return ret
 
-    def nodeinfo(self, nodename):
-        return self._nodeinfo_as_dict(nodename, self._nodeinfo(nodename))
+    def nodeinfo(self, nodename, interpolate=True):
+        return self._nodeinfo_as_dict(nodename, self._nodeinfo(nodename, interpolate))
 
     def inventory(self):
         entities = {}
         for n in self._storage.enumerate_nodes():
-            entities[n] = self._nodeinfo(n)
+            entities[n] = self._nodeinfo(n, False)
 
         nodes = {}
         applications = {}

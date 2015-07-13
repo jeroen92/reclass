@@ -60,7 +60,7 @@ def top(minion_id, storage_type=OPT_STORAGE_TYPE,
     # specific minion, otherwise return the entire top data (which we need for
     # CLI invocations of the adapter):
     if minion_id is not None:
-        data = reclass.nodeinfo(minion_id)
+        data = reclass.nodeinfo(minion_id, False)
         applications = data.get('applications', [])
         env = data['environment']
         return {env: applications}
